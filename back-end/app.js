@@ -78,5 +78,21 @@ app.post('/messages/save', async (req, res) => {
   }
 })
 
+app.use(cors());
+app.use(express.json());
+
+// NEW
+app.get("/api/about", (req, res) => {
+  res.json({
+    title: "About Me",
+    name: "Ashmit Mukherjee",
+    photoUrl: "/images/ashmit.jpg",
+    paragraphs: [
+      "I'm a CS Junior at NYUAD with an Econ minor.",
+      "I am a student driven by curiosity about how data can reveal the invisible patterns that govern human lives. With a background in computer science and economics, I’m especially interested in the intersection of technology and social science, using data to understand population trends, inequality, and behavior at scale. Passionate about interdisciplinary thinking, clear communication, and building for impact.",
+      "I love reading, swimming and listening to music."
+    ]
+  });
+});
 // export the express app we created to make it available to other modules
 module.exports = app // CommonJS export style!
