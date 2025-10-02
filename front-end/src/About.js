@@ -1,32 +1,26 @@
-import { useEffect, useState } from 'react'
-import './About.css'
+import { useEffect, useState } from "react"
 
 const About = () => {
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [about, setAbout] = useState(null)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    fetch('/api/about')
-      .then(res => res.json())
-      .then(json => setData(json))
-      .finally(() => setLoading(false))
+    fetch("/about") // proxy forwards to backend
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch")
+        return res.json()
+      })
+      .then((data) => setAbout(data))
+      .catch((err) => setError(err.message))
   }, [])
 
-  if (loading) return <p>Loading…</p>
-  if (!data) return <p>Error loading About Us page</p>
+  if (error) return <p>Error: {error}</p>
+  if (!about) return <p>Loading...</p>
 
   return (
-    <article className="About-article">
-      <h2 className="About-title">{data.title}</h2>
-      <div className="About-header">
-        <img src={data.photoUrl} alt={data.name} className="About-photo" />
-        <h3 className="About-name">{data.name}</h3>
-      </div>
-      <div className="About-text">
-        {data.paragraphs.map((p, i) => (
-          <p key={i}>{p}</p>
-        ))}
-      </div>
+    <article>
+      <h1>{about.title}</h1>
+      <p>{about.content}</p>
     </article>
   )
 }
