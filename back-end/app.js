@@ -82,7 +82,7 @@ app.use(cors());
 app.use(express.json());
 
 // NEW
-app.get("/api/about", (req, res) => {
+app.get("/about", (req, res) => {
   res.json({
     title: "About Me",
     name: "Ashmit Mukherjee",
