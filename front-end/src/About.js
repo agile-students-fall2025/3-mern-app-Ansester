@@ -5,7 +5,7 @@ const About = () => {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    fetch("/about") // proxy forwards to backend
+    fetch("http://localhost:5000/about") // proxy forwards to backend
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch")
         return res.json()
