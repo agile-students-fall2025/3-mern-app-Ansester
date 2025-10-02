@@ -1,33 +1,34 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from 'react'
+import './About.css'
 
-export default function About() {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [err, setErr] = useState(null);
+const About = () => {
+  const [data, setData] = useState(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const base = process.env.REACT_APP_API || "";
-    axios.get(`${base}/api/about`)
-      .then(r => setData(r.data))
-      .catch(e => setErr(e.message))
-      .finally(() => setLoading(false));
-  }, []);
+    fetch('/api/about')
+      .then(res => res.json())
+      .then(json => setData(json))
+      .finally(() => setLoading(false))
+  }, [])
 
-  if (loading) return <p>Loading…</p>;
-  if (err) return <p style={{color:"crimson"}}>Error: {err}</p>;
-  if (!data) return null;
+  if (loading) return <p>Loading…</p>
+  if (!data) return <p>Error loading About Us page</p>
 
   return (
-    <main style={{maxWidth: 780, margin: "40px auto", padding: "0 16px"}}>
-      <h1>{data.title}</h1>
-      <img
-        src={data.photoUrl}
-        alt={data.name}
-        style={{width: 220, borderRadius: 12, display: "block", margin: "16px 0"}}
-      />
-      <h2 style={{marginTop: 0}}>{data.name}</h2>
-      {data.paragraphs?.map((p, i) => <p key={i}>{p}</p>)}
-    </main>
-  );
+    <article className="About-article">
+      <h2 className="About-title">{data.title}</h2>
+      <div className="About-header">
+        <img src={data.photoUrl} alt={data.name} className="About-photo" />
+        <h3 className="About-name">{data.name}</h3>
+      </div>
+      <div className="About-text">
+        {data.paragraphs.map((p, i) => (
+          <p key={i}>{p}</p>
+        ))}
+      </div>
+    </article>
+  )
 }
+
+export default About
