@@ -8,7 +8,7 @@ export default function About() {
 
   useEffect(() => {
     const base = process.env.REACT_APP_API || "";
-    axios.get(`${base}/about`)
+    axios.get("http://localhost:5002/about")
       .then(r => setData(r.data))
       .catch(e => setErr(e.message))
       .finally(() => setLoading(false));
