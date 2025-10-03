@@ -24,7 +24,12 @@ export default function About() {
       <img
         src={data.photoUrl}
         alt={data.name}
-        style={{ width: 220, borderRadius: 12, display: "block", margin: "16px 0" }}
+        style={{ 
+            width: 220, 
+            borderRadius: 12, 
+            display: "block", 
+            margin: "16px auto" 
+        }}
       />
       <h2 style={{ marginTop: 0 }}>{data.name}</h2>
       {data.paragraphs?.map((p, i) => <p key={i}>{p}</p>)}
