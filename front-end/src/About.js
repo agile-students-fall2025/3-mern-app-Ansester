@@ -1,28 +1,33 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-const About = () => {
-  const [about, setAbout] = useState(null)
-  const [error, setError] = useState(null)
+export default function About() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [err, setErr] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:5002/about") // proxy forwards to backend
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch")
-        return res.json()
-      })
-      .then((data) => setAbout(data))
-      .catch((err) => setError(err.message))
-  }, [])
+    const base = process.env.REACT_APP_API || "";
+    axios.get(`${base}/api/about`)
+      .then(r => setData(r.data))
+      .catch(e => setErr(e.message))
+      .finally(() => setLoading(false));
+  }, []);
 
-  if (error) return <p>Error: {error}</p>
-  if (!about) return <p>Loading...</p>
+  if (loading) return <p>Loading…</p>;
+  if (err) return <p style={{color:"crimson"}}>Error: {err}</p>;
+  if (!data) return null;
 
   return (
-    <article>
-      <h1>{about.title}</h1>
-      <p>{about.content}</p>
-    </article>
-  )
+    <main style={{maxWidth: 780, margin: "40px auto", padding: "0 16px"}}>
+      <h1>{data.title}</h1>
+      <img
+        src={data.photoUrl}
+        alt={data.name}
+        style={{width: 220, borderRadius: 12, display: "block", margin: "16px 0"}}
+      />
+      <h2 style={{marginTop: 0}}>{data.name}</h2>
+      {data.paragraphs?.map((p, i) => <p key={i}>{p}</p>)}
+    </main>
+  );
 }
-
-export default About
